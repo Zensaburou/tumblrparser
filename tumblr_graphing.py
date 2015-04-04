@@ -4,7 +4,7 @@ import requests, sys, re
 from bs4 import BeautifulSoup
 from py2neo import neo4j, node, rel
 
-def notes_on_page(soup)
+def notes_on_page(soup):
     reblogs_on_page = []
     for reblog in soup.find_all("li", "reblog"):
         reblogs_on_page.append(reblog.get_text())
