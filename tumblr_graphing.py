@@ -4,7 +4,6 @@ import requests, sys, re
 from bs4 import BeautifulSoup
 from py2neo import neo4j, node, rel
 
-
 def get_all_notes(posturl):
     r = requests.get(posturl)
     soup = BeautifulSoup(r.text)
@@ -23,19 +22,19 @@ def get_all_notes(posturl):
             blogurl = "/".join(posturl.split("/")[0:3])
             notes_url = blogurl + re.search(regex, str(morenotes[0])).group(1)
             print notes_url
-            
+
             # request and soupify the next page of notes
             r = requests.get(notes_url)
             soup = BeautifulSoup(r.text)
             morenotes = soup.find_all("a", "more_notes_link")
-            
+
             # get notes from current page
             for reblog in soup.find_all("li", "reblog"):
                 reblogs.append(reblog.get_text())
-            
+
     print len(reblogs)
     return reblogs
-    
+
 def reblogs_into_db(reblogs):
     graph_db = neo4j.GraphDatabaseService("http://localhost:7474/db/data/")
     people = graph_db.get_or_create_index(neo4j.Node, "People")
@@ -57,12 +56,6 @@ def reblogs_into_db(reblogs):
             else:
                 properties = {}
             graph_db.create(rel(reblogger, ("Reblogged_from", properties), source))
-
-# TODO
-# look at tags? recommendations?
-# is there something fun i can do with comments?
-# add likers as and commenters as separate labels
-
 
 if __name__ == "__main__":
     posturl = sys.argv[1]
