@@ -1,6 +1,6 @@
-# Graphing Tumblr with Neo4j
+# Tumblr reblog data with Python and SQLite
 
-This is a simple script, using py2neo, that gets all reblog data on a specific Tumblr post and adds it to a Neo4j database.
+This is a fork of bellisk's tumblr scraping repo that uses sqlite instead of neo4j.
 
 ## Usage
 
