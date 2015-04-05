@@ -35,7 +35,7 @@ def get_all_notes(posturl):
     r = requests.get(posturl)
     soup = BeautifulSoup(r.text)
     # get notes from front page
-    front_page_notes = save_notes_on_page(db, soup)
+    save_notes_on_page(db, soup)
 
     morenotes = soup.find_all("a", "more_notes_link")
     while morenotes:
@@ -50,7 +50,7 @@ def get_all_notes(posturl):
         morenotes = soup.find_all("a", "more_notes_link")
 
         # get notes from current page
-        notes_on_page = save_notes_on_page(db, soup)
+        save_notes_on_page(db, soup)
 
 if __name__ == "__main__":
     posturl = sys.argv[1]
