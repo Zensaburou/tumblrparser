@@ -6,3 +6,6 @@
 
 # Virtualenv files
 venv
+
+# Ignore sqlite database
+*.sqlite3
