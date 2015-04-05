@@ -5,35 +5,34 @@ from bs4 import BeautifulSoup
 from py2neo import neo4j, node, rel
 
 def notes_on_page(soup):
-    reblogs_on_page = []
+    notes_on_page = []
     for reblog in soup.find_all("li", "reblog"):
-        reblogs_on_page.append(reblog.get_text())
-    return reblogs_on_page
+        notes_on_page.append(reblog.get_text())
+    return notes_on_page
 
 def get_all_notes(posturl):
     r = requests.get(posturl)
     soup = BeautifulSoup(r.text)
-    morenotes = soup.find_all("a", "more_notes_link")
     reblogs = []
-    if not morenotes:
-        reblogs + notes_on_page(soup)
-    else:
-        # get notes from front page
-        reblogs + notes_on_page(soup)
-        while morenotes:
-            # get notes page url
-            regex = u"'(/notes/[\w=?/]*)'"
-            blogurl = "/".join(posturl.split("/")[0:3])
-            notes_url = blogurl + re.search(regex, str(morenotes[0])).group(1)
-            print notes_url
 
-            # request and soupify the next page of notes
-            r = requests.get(notes_url)
-            soup = BeautifulSoup(r.text)
-            morenotes = soup.find_all("a", "more_notes_link")
+    # get notes from front page
+    reblogs + notes_on_page(soup)
 
-            # get notes from current page
-            reblogs + notes_on_page(soup)
+    morenotes = soup.find_all("a", "more_notes_link")
+    while morenotes:
+        # get notes page url
+        regex = u"'(/notes/[\w=?/]*)'"
+        blogurl = "/".join(posturl.split("/")[0:3])
+        notes_url = blogurl + re.search(regex, str(morenotes[0])).group(1)
+        print notes_url
+
+        # request and soupify the next page of notes
+        r = requests.get(notes_url)
+        soup = BeautifulSoup(r.text)
+        morenotes = soup.find_all("a", "more_notes_link")
+
+        # get notes from current page
+        reblogs + notes_on_page(soup)
 
     print len(reblogs)
     return reblogs
