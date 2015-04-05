@@ -1,10 +1,11 @@
 # Tumblr reblog data with Python and SQLite
 
-This is a fork of bellisk's tumblr scraping repo that uses sqlite instead of neo4j.
+This is a remake of Bellisk's tumblr scraping repo that uses sqlite instead of neo4j.
+The original which uses Neo4j can be found [here](https://github.com/bellisk/tumblrgraphing/blob/master/tumblr_graphing.py)
 
 ## Usage
+You will need sqlite3 in order to use this script.
+Run the script from the terminal with `python tumblr-graphing.py [URL of post]`.
 
-1. Download Neo4j from [http://www.neo4j.org/](http://www.neo4j.org/) if you don't already have it, start the server and open [http://localhost:7474](http://localhost:7474).
-2. Run the script from the terminal with `python tumblr-graphing.py [URL of post]`.
-
-The nodes in the graph represent Tumblr users and are labelled "poster", "reblogger" and "source" (someone from whom the post was reblogged). Currently the only relationship in the graph is "reblogged from", with any text added by the reblogger included in the relationship as "comment".
+Data is saved to a `notes` table with the `reblogger` and `source` attributes.
+The original poster will have a `source` value of `none`.
